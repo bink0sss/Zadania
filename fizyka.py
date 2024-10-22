@@ -8,15 +8,17 @@ def oblicz_sily():
         dlugosc_belki = float(dlugosc_belki_entry.get())
         a = float(odleglosc_a_entry.get())
         b = float(odleglosc_b_entry.get())
+        grawitacja = float(grawitacja_entry.get())
 
         if a + b > dlugosc_belki:
             raise ValueError("Odległości podpór są większe niż długość belki!")
 
+
         # Siła grawitacji (ciężar belki)
-        ciezar_belki = masa * 9.81
+        ciezar_belki = masa * grawitacja
         
         # Moment względem podpor
-        Rb = (ciezar_belki * a) / (a + b)  # Siła reakcji w podporze B
+        Rb = (ciezar_belki * (dlugosc_belki / 2 - a)) / (dlugosc_belki - b - a)  # Siła reakcji w podporze B
         Ra = ciezar_belki - Rb  # Siła reakcji w podporze A
 
         # Wyświetlenie wyników w nowym oknie
@@ -62,9 +64,14 @@ tk.Label(root, text="Odległość podpory B od końca belki (m):").grid(row=3, c
 odleglosc_b_entry = tk.Entry(root, validate="key", validatecommand=(reg, '%P', '%s'))  # Walidacja liczb dodatnich
 odleglosc_b_entry.grid(row=3, column=1)
 
+tk.Label(root, text="Siła grawitacji (m/s²):").grid(row=4, column=0)
+grawitacja_entry = tk.Entry(root, validate="key", validatecommand=(reg, '%P', '%s'))  # Walidacja liczb dodatnich
+grawitacja_entry.grid(row=4, column=1)
+grawitacja_entry.insert(0, "9.81")  # Domyślna wartość siły grawitacji
+
 # Przycisk do obliczania sił
 oblicz_button = tk.Button(root, text="Oblicz siły", command=oblicz_sily)
-oblicz_button.grid(row=4, columnspan=2)
+oblicz_button.grid(row=5, columnspan=2)
 
 # Uruchomienie aplikacji
 root.mainloop()
